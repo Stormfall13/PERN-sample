@@ -10,16 +10,18 @@ const adminRoutes = require("./routes/adminRoutes");
 const imageRoutes = require("./routes/imageRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");
+const cartRoutes = require("./routes/cartRoutes");
 
 const authMiddleware = require("./middlewares/authMiddleware");
 
 const Image = require("./models/Image");
 const Category = require("./models/Category");
 const Product = require("./models/Product");
+const Cart = require("./models/Cart");
+const CartItem = require("./models/CartItem");
 
 const app = express();
 
-// app.use(cors());
 app.use(cors({
     origin: "*",
     credentials: true,
@@ -33,15 +35,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/images", imageRoutes);
-// app.use("/assets", express.static("assets")); // Раздача изображений
-// app.use("/assets", (req, res, next) => {
-//     res.setHeader("Access-Control-Allow-Origin", "*"); 
-//     res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
-//     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//     res.setHeader("Cross-Origin-Resource-Policy", "cross-origin"); // ⬅️ Добавь этот заголовок
-//     next();
-// });
-// app.use("/assets", express.static(path.join(__dirname, "assets"))); // Раздаем статические файлы из папки assets
 app.use("/assets", (req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*"); 
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
@@ -51,6 +44,8 @@ app.use("/assets", (req, res, next) => {
 }, express.static(path.join(__dirname, "assets"))); 
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
+
 
 
 // Защищённый маршрут (пример)

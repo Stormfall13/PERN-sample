@@ -55,10 +55,18 @@ router.put("/:id", async (req, res) => {
     }
 });
 
-// 📌 3. Получение всех товаров
+// 📌 3. Получение всех товаров с возможностью фильтрации по `categoryId`
 router.get("/", async (req, res) => {
     try {
-        const products = await Product.findAll({ include: Category });
+        const { categoryId } = req.query;
+
+        const whereClause = categoryId ? { categoryId } : undefined;
+
+        const products = await Product.findAll({
+            where: whereClause,
+            include: Category,
+        });
+
         res.json(products);
     } catch (err) {
         res.status(500).json({ message: "Ошибка сервера", error: err.message });
