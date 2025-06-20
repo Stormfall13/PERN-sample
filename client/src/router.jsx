@@ -10,6 +10,7 @@ const AdminPage = lazy(() => import("./pages/AdminPage"));
 const GalleryPage = lazy(() => import("./pages/GalleryPage"));
 const CategoryPage = lazy(() => import("./pages/CategoryPage"));
 const CartPage = lazy(() => import("./pages/CartPage"));
+const ProductPage = lazy(() => import("./pages/ProductPage"));
 
 
 const AppRouter = () => {
@@ -28,7 +29,7 @@ const AppRouter = () => {
                     <Route path="/gallery" element={ <ProtectedRoute allowedRoles={["admin"]}> <GalleryPage /> </ProtectedRoute> } />
                     <Route path="/category/:id" element={ <ProtectedRoute allowedRoles={["admin", "user"]}> <CategoryPage /> </ProtectedRoute> } />
                     <Route path="/cart" element={<ProtectedRoute allowedRoles={["user", "admin"]}> <CartPage/> </ProtectedRoute>} />
-                    
+                    <Route path="/product/:id" element={<ProtectedRoute allowedRoles={["admin", "user"]}> <ProductPage /> </ProtectedRoute> } />
                     {/* Если страница не найдена — редирект на `/` */}
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>

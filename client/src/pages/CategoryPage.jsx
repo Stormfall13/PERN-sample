@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import noPhoto from "../assets/no-photo.png";
 
 import './categoryPage.css';
@@ -50,13 +50,15 @@ const CategoryPage = () => {
             <ul>
             {products.map((product) => (
                 <li key={product.id}>
-                <h3>{product.nameProd}</h3>
-                <p>Цена: {product.price} $</p>
-                <img 
-                    src={product.image ? `${process.env.REACT_APP_API_URL}${product.image}` : noPhoto} 
-                    alt={product.nameProd} 
-                    width="200" 
-                />
+                <Link to={`/product/${product.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                    <h3>{product.nameProd}</h3>
+                    <p>Цена: {product.price} $</p>
+                    <img 
+                        src={product.image ? `${process.env.REACT_APP_API_URL}${product.image}` : noPhoto} 
+                        alt={product.nameProd} 
+                        width="200" 
+                    />
+                </Link>
                 <button onClick={() => handleAddToCart(product.id)}>
                     Добавить в корзину
                 </button>

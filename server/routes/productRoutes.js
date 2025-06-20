@@ -55,6 +55,22 @@ router.put("/:id", async (req, res) => {
     }
 });
 
+// 📌 Получить один товар по ID
+router.get("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await Product.findByPk(id, { include: Category });
+
+        if (!product) {
+            return res.status(404).json({ message: "Товар не найден" });
+        }
+
+        res.json(product);
+    } catch (err) {
+        res.status(500).json({ message: "Ошибка сервера", error: err.message });
+    }
+});
+
 // 📌 3. Получение всех товаров с возможностью фильтрации по `categoryId`
 router.get("/", async (req, res) => {
     try {
@@ -89,5 +105,6 @@ router.delete("/:id", async (req, res) => {
         res.status(500).json({ message: "Ошибка сервера", error: err.message });
     }
 });
+
 
 module.exports = router;

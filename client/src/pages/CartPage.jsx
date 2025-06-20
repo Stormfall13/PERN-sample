@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import noPhoto from "../assets/no-photo.png";
+import noP2hoto from "../assets/no-photo.png";
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);

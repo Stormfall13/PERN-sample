@@ -14,7 +14,6 @@ const AdminPage = () => {
     const [categoryId, setCategoryId] = useState("");
     const [image, setImage] = useState("");
     const [allImages, setAllImages] = useState([]);
-    // console.log(image);
     
     const [categoryName, setCategoryName] = useState("");
 
@@ -46,6 +45,11 @@ const AdminPage = () => {
 
         const data = await response.json();
         console.log("Товар добавлен:", data);
+
+        setNameProd("")
+        setPrice("")
+        setCategoryId("")
+        setImage("")
     };
 
 
@@ -177,19 +181,10 @@ const AdminPage = () => {
     };
 
 
-
-    // const selectImage = (img) => {
-        // console.log("Выбранное изображение:", img);
-        // setImage(img); // Сохраняем весь объект изображения
-        // setWindowOverlay(false);
-    // };
-
-    // const selectImage = (imgPath) => {
-    //     console.log("Выбрано изображение:", imgPath);
-    //     setImage(imgPath);
-    //     setWindowOverlay(false);
-    // };
-
+    const selectImage = (imgPath) => {
+        setImage(imgPath);        // Устанавливаем ссылку на выбранное изображение
+        setWindowOverlay(false); // Закрываем оверлей
+    };
 
     return (
         <div className="admin-container">
@@ -297,8 +292,7 @@ const AdminPage = () => {
                             maxWidth: 100,
                             maxHeight: 100
                         }}>
-                            {/* <img src={`${process.env.REACT_APP_API_URL}${image.filepath}`} alt={image.filepath}  style={{ width: '100%' }}/> */}
-                            <div>asdasd</div>
+                            <img src={`${process.env.REACT_APP_API_URL}${image}`} alt="Выбранное изображение" style={{ width: '100%' }} />
                         </div>
                         )} 
                     </div>
@@ -321,9 +315,14 @@ const AdminPage = () => {
                         <button onClick={toggleOverlay} className="close-btn">Закрыть</button>
                         <div className="image-grid" style={{ display: "flex" }}>
                             {allImages.map((img) => (
-                                <div className="image__grid-wrapper" key={img.id} style={{ maxWidth: 200, maxHeight: 200 }}>
-                                    {/* <img src={`${process.env.REACT_APP_API_URL}${img.filepath}`} alt={img.filepath} onClick={() => selectImage(img.filepath)} style={{ width: '100%' }}/>  */}
-                                </div>
+                                <div className="image__grid-wrapper" key={img.id} style={{ cursor: 'pointer', maxWidth: 150 }}>
+                                    <img
+                                        src={`${process.env.REACT_APP_API_URL}${img.filepath}`}
+                                        alt={img.filepath}
+                                        onClick={() => selectImage(img.filepath)}
+                                        style={{ width: '100%', borderRadius: 8, border: '2px solid #ccc' }}
+                                    />
+                                </div> 
                             ))}
                         </div>
                     </div>
