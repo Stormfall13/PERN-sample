@@ -11,6 +11,7 @@ const GalleryPage = lazy(() => import("./pages/GalleryPage"));
 const CategoryPage = lazy(() => import("./pages/CategoryPage"));
 const CartPage = lazy(() => import("./pages/CartPage"));
 const ProductPage = lazy(() => import("./pages/ProductPage"));
+const AdmimAllUsersPage = lazy(() => import("./pages/AdminAllUsersPage"))
 
 
 const AppRouter = () => {
@@ -21,10 +22,16 @@ const AppRouter = () => {
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/" element={<Home />} />
+                    <Route path="/category/:id" element={<CategoryPage />} />
+                    <Route path="/cart" element={<CartPage/>} />
+                    <Route path="/product/:id" element={<ProductPage />} />
+
                     
                     {/* 🔐 Защищенные маршруты (только для user и admin) */}
                     <Route path="/" element={ <ProtectedRoute allowedRoles={["user", "admin"]}> <Home /> </ProtectedRoute> } />
                     <Route path="/user" element={ <ProtectedRoute allowedRoles={["user", "admin"]}> <UserPage /> </ProtectedRoute> } />
+                    <Route path="/all-users" element={<ProtectedRoute allowedRoles={["admin"]}><AdmimAllUsersPage /></ProtectedRoute>} />
                     <Route path="/admin" element={ <ProtectedRoute allowedRoles={["admin"]}> <AdminPage /> </ProtectedRoute> } />
                     <Route path="/gallery" element={ <ProtectedRoute allowedRoles={["admin"]}> <GalleryPage /> </ProtectedRoute> } />
                     <Route path="/category/:id" element={ <ProtectedRoute allowedRoles={["admin", "user"]}> <CategoryPage /> </ProtectedRoute> } />

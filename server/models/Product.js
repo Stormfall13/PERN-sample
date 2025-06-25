@@ -25,6 +25,11 @@ const Product = sequelize.define("Product", {
         type: DataTypes.STRING,
         allowNull: true, // Можно загружать товары без фото
     },
+    stock: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+    }
 });
 
 Category.hasMany(Product, { foreignKey: "categoryId", onDelete: "CASCADE" });

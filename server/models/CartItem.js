@@ -19,7 +19,5 @@ const CartItem = sequelize.define("CartItem", {
     },
 });
 
-CartItem.belongsTo(Cart, { foreignKey: "cartId", onDelete: "CASCADE" });
-CartItem.belongsTo(Product, { foreignKey: "productId", onDelete: "CASCADE" });
 
 module.exports = CartItem;

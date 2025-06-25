@@ -10,7 +10,8 @@ const router = express.Router();
 router.get("/", authMiddleware, async (req, res) => {
     try {
         const cart = await Cart.findOne({
-            where: { userId: req.user.id },
+            where: { userId: req.user.userId },
+            // where: { userId: req.user.id },
             include: {
                 model: CartItem,
                 include: Product
@@ -31,16 +32,20 @@ router.get("/", authMiddleware, async (req, res) => {
 router.post("/add", authMiddleware, async (req, res) => {
     try {
         const { productId, quantity } = req.body;
-
-        let cart = await Cart.findOne({ where: { userId: req.user.id } });
+        
+        // let cart = await Cart.findOne({ where: { userId: req.user.id } });
+        let cart = await Cart.findOne({ where: { userId: req.user.userId } });
+        
 
         if (!cart) {
-            cart = await Cart.create({ userId: req.user.id });
+            // cart = await Cart.create({ userId: req.user.id });
+            cart = await Cart.create({ userId: req.user.userId });
         }
 
         let item = await CartItem.findOne({
             where: { cartId: cart.id, productId }
         });
+        
 
         if (item) {
             item.quantity += quantity;
@@ -52,7 +57,7 @@ router.post("/add", authMiddleware, async (req, res) => {
                 quantity
             });
         }
-
+        
         res.json({ message: "Товар добавлен в корзину", item });
     } catch (err) {
         res.status(500).json({ message: "Ошибка при добавлении товара", error: err.message });
@@ -63,7 +68,7 @@ router.post("/add", authMiddleware, async (req, res) => {
 router.delete("/remove/:productId", authMiddleware, async (req, res) => {
     try {
         const { productId } = req.params;
-        const cart = await Cart.findOne({ where: { userId: req.user.id } });
+        const cart = await Cart.findOne({ where: { userId: req.user.userId } });
 
         if (!cart) return res.status(404).json({ message: "Корзина не найдена" });
 
@@ -80,7 +85,7 @@ router.delete("/remove/:productId", authMiddleware, async (req, res) => {
 // 📌 Очистить корзину полностью
 router.delete("/clear", authMiddleware, async (req, res) => {
     try {
-        const cart = await Cart.findOne({ where: { userId: req.user.id } });
+        const cart = await Cart.findOne({ where: { userId: req.user.userId } });
         if (!cart) return res.status(404).json({ message: "Корзина не найдена" });
 
         await CartItem.destroy({ where: { cartId: cart.id } });

@@ -7,7 +7,7 @@ const router = express.Router();
 // 📌 1. Создание товара
 router.post("/", async (req, res) => {
     try {
-        const { nameProd, price, categoryId, image } = req.body; // `image` приходит строкой
+        const { nameProd, price, categoryId, image, stock } = req.body; // `image` приходит строкой
 
         if (!nameProd || !price || !categoryId) {
             return res.status(400).json({ message: "Все поля обязательны" });
@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
             return res.status(404).json({ message: "Категория не найдена" });
         }
 
-        const newProduct = await Product.create({ nameProd, price, categoryId, image });
+        const newProduct = await Product.create({ nameProd, price, categoryId, image, stock });
         res.status(201).json(newProduct);
     } catch (err) {
         res.status(500).json({ message: "Ошибка сервера", error: err.message });
@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const { nameProd, price, categoryId, image } = req.body; // `image` теперь строка
+        const { nameProd, price, categoryId, image, stock } = req.body; // `image` теперь строка
 
         const product = await Product.findByPk(id);
         if (!product) {
@@ -47,6 +47,7 @@ router.put("/:id", async (req, res) => {
         product.price = price || product.price;
         product.categoryId = categoryId || product.categoryId;
         product.image = image !== undefined ? image : product.image; // Если `image` передали — обновляем, иначе оставляем старое
+        product.stock = stock || product.stock;
 
         await product.save();
         res.json({ message: "Товар обновлён", product });

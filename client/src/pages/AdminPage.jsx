@@ -4,14 +4,12 @@ import { useNavigate, Link } from "react-router-dom";
 import Header from "../components/Header";
 
 const AdminPage = () => {
-    const [users, setUsers] = useState([]);
-    const [editUser, setEditUser] = useState(null);
-    const [formData, setFormData] = useState({ username: "", email: "", role: "", password: "" });
     const navigate = useNavigate();
 
     const [nameProd, setNameProd] = useState("");
     const [price, setPrice] = useState("");
     const [categoryId, setCategoryId] = useState("");
+    const [stock, setStock] = useState("")
     const [image, setImage] = useState("");
     const [allImages, setAllImages] = useState([]);
     
@@ -31,6 +29,7 @@ const AdminPage = () => {
             price,
             categoryId,
             image,
+            stock,
         };
         
         console.log("📤 JSON отправки:", JSON.stringify(payload, null, 2));
@@ -50,6 +49,7 @@ const AdminPage = () => {
         setPrice("")
         setCategoryId("")
         setImage("")
+        setStock("")
     };
 
 
@@ -101,76 +101,8 @@ const AdminPage = () => {
 
         fetchImages();
 
-        const fetchUsers = async () => {
-            try {
-                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/users`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                if (!res.ok) throw new Error("Ошибка загрузки пользователей");
-                const data = await res.json();
-                setUsers(data);
-            } catch (error) {
-                console.error("Ошибка:", error);
-            }
-        };
-
-        fetchUsers();
     }, [token, user, navigate]);
 
-    const deleteUser = async (id) => {
-        if (!window.confirm("Вы уверены, что хотите удалить пользователя?")) return;
-
-        try {
-            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/users/${id}`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (!res.ok) throw new Error("Ошибка удаления");
-
-            setUsers(users.filter(user => user.id !== id));
-        } catch (error) {
-            console.error("Ошибка:", error);
-        }
-    };
-
-    const handleEdit = (user) => {
-        setEditUser(user);
-        setFormData({ username: user.username, email: user.email, role: user.role, password: "" });
-    };
-
-    const saveEdit = async () => {
-        try {
-            const updatedData = { ...formData };
-
-            if (!updatedData.password) {
-                delete updatedData.password; // Не отправляем, если пароль не изменён
-            }
-
-            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/users/${editUser.id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(updatedData),
-            });
-
-            if (!res.ok) throw new Error("Ошибка обновления");
-
-            setUsers(users.map(user => (user.id === editUser.id ? { ...user, ...updatedData } : user)));
-            setEditUser(null);
-        } catch (error) {
-            console.error("Ошибка:", error);
-        }
-    };
 
     if (!user) {
         return <h2>Загрузка...</h2>;
@@ -192,77 +124,12 @@ const AdminPage = () => {
             <Link to="/gallery">
                 <button>Перейти в галерею</button>
             </Link>
+            <Link to='/all-users'>
+                Страница пользователей
+            </Link>
             <h1>Админ-панель</h1>
 
-            <div className="users-list">
-                {users.map((user) => (
-                    <div className="user-card" key={user.id}>
-                        <p><strong>ID:</strong> {user.id}</p>
 
-                        <p><strong>Имя:</strong> 
-                            {editUser?.id === user.id ? (
-                                <input 
-                                    type="text"
-                                    value={formData.username}
-                                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                                />
-                            ) : (
-                                user.username
-                            )}
-                        </p>
-
-                        <p><strong>Email:</strong> 
-                            {editUser?.id === user.id ? (
-                                <input 
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                />
-                            ) : (
-                                user.email
-                            )}
-                        </p>
-
-                        <p><strong>Роль:</strong> 
-                            {editUser?.id === user.id ? (
-                                <select value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })}>
-                                    <option value="user">User</option>
-                                    <option value="admin">Admin</option>
-                                </select>
-                            ) : (
-                                user.role
-                            )}
-                        </p>
-
-                        <p><strong>Пароль:</strong> 
-                            {editUser?.id === user.id ? (
-                                <input 
-                                    type="password"
-                                    placeholder="Новый пароль (если нужно)"
-                                    value={formData.password}
-                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                />
-                            ) : (
-                                "••••••"
-                            )}
-                        </p>
-
-                        <div className="user-card-actions">
-                            {editUser?.id === user.id ? (
-                                <>
-                                    <button onClick={saveEdit}>Сохранить</button>
-                                    <button onClick={() => setEditUser(null)}>Отмена</button>
-                                </>
-                            ) : (
-                                <>
-                                    <button onClick={() => handleEdit(user)}>Редактировать</button>
-                                    <button onClick={() => deleteUser(user.id)}>Удалить</button>
-                                </>
-                            )}
-                        </div>
-                    </div>
-                ))}
-            </div>
 
             <h2>Добавить категорию</h2>
             <form onSubmit={handleCategorySubmit}>
@@ -282,19 +149,21 @@ const AdminPage = () => {
                     <input type="text" placeholder="Название" value={nameProd} onChange={(e) => setNameProd(e.target.value)} required />
                     <input type="number" placeholder="Цена" value={price} onChange={(e) => setPrice(e.target.value)} required />
                     <input type="number" placeholder="ID категории" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required />
+                    <input type="number" placeholder="Количество" value={stock} onChange={(e) => setStock(e.target.value)}/>
                     <input type="text" placeholder="ссылка изображения" value={image} onChange={(e) => setImage(e.target.value)} />
                     <div className="gallery__selected">
                         <button type="button" onClick={toggleOverlay}>Добавить из Галереи</button> 
-                        {image === null ? (
-                            <p>Изображение не выбрано</p>
-                        ) : (
-                        <div className="selected__image" style={{
-                            maxWidth: 100,
-                            maxHeight: 100
-                        }}>
-                            <img src={`${process.env.REACT_APP_API_URL}${image}`} alt="Выбранное изображение" style={{ width: '100%' }} />
+                        {image ? (
+                        <div className="selected__image" style={{ maxWidth: 100, maxHeight: 100 }}>
+                            <img
+                            src={`${process.env.REACT_APP_API_URL}${image.startsWith("/") ? "" : "/uploads/"}${image}`}
+                            alt="Выбранное изображение"
+                            style={{ width: "100%" }}
+                            />
                         </div>
-                        )} 
+                        ) : (
+                        <p>Изображение не выбрано</p>
+                        )}
                     </div>
                     <button type="submit">Добавить</button>
                 </form>

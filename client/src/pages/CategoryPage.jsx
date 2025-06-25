@@ -22,6 +22,8 @@ const CategoryPage = () => {
     }, [id]);
 
     const handleAddToCart = async (productId) => {
+        console.log(productId);
+        
         try {
             const token = localStorage.getItem("token");
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/cart/add`, {
@@ -58,6 +60,7 @@ const CategoryPage = () => {
                         alt={product.nameProd} 
                         width="200" 
                     />
+                    <p>На складе: {product.stock}</p>
                 </Link>
                 <button onClick={() => handleAddToCart(product.id)}>
                     Добавить в корзину

@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 const User = require("./User");
+const CartItem = require("./CartItem");
 
 const Cart = sequelize.define("Cart", {
     userId: {
@@ -10,6 +11,6 @@ const Cart = sequelize.define("Cart", {
     },
 });
 
-Cart.belongsTo(User, { foreignKey: "userId", onDelete: "CASCADE" });
+
 
 module.exports = Cart;
