@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import Header from "../components/Header";
+import BasketCount from "../components/BasketCount";
 
 
 const Home = () => {
@@ -18,6 +19,7 @@ const Home = () => {
     return (
         <div>
             <Header />
+            <BasketCount />
             <nav>
                 <ul>
                 {categories.map((category) => (

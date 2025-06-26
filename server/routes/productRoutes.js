@@ -1,4 +1,5 @@
 const express = require("express");
+const { Op } = require("sequelize");
 const Product = require("../models/Product");
 const Category = require("../models/Category");
 
@@ -56,6 +57,26 @@ router.put("/:id", async (req, res) => {
     }
 });
 
+router.get("/search", async (req, res) => {
+    const { query } = req.query;
+  
+    if (!query) return res.status(400).json({ message: "Пустой запрос" });
+  
+    try {
+      const results = await Product.findAll({
+        where: {
+          nameProd: {
+            [Op.iLike]: `%${query}%`, // PostgreSQL нечувствительный поиск
+          },
+        },
+      });
+  
+      res.json(results);
+    } catch (err) {
+      res.status(500).json({ message: "Ошибка поиска", error: err.message });
+    }
+});
+
 // 📌 Получить один товар по ID
 router.get("/:id", async (req, res) => {
     try {
@@ -107,5 +128,7 @@ router.delete("/:id", async (req, res) => {
     }
 });
 
+
+  
 
 module.exports = router;

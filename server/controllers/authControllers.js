@@ -40,7 +40,7 @@ const login = async (req, res) => {
 
         // Генерируем JWT-токен
         const token = jwt.sign({ userId: user.id, role: user.role }, SECRET_KEY, {
-            expiresIn: "1h",
+            expiresIn: "24h",
         });
 
         // Отправляем токен и пользователя
