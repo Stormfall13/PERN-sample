@@ -134,7 +134,7 @@ const BasketPage = () => {
               <button onClick={() => updateQuantity(item.Product.id, quantities[item.Product.id] - 1, item.Product.stock)}>-</button>
               
               <input
-                type="number"
+                type="text"
                 value={quantities[item.Product.id] || 1}
                 min={1}
                 max={item.Product.stock}

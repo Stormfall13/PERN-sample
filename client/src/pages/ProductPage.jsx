@@ -93,7 +93,7 @@ const ProductPage = () => {
       <div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
         <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} disabled={quantity <= 1}>-</button>
         <input
-          type="number"
+          type="text"
           min="1"
           max={product.stock}
           value={quantity}

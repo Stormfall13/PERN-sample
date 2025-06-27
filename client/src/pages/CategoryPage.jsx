@@ -112,7 +112,7 @@ const CategoryPage = () => {
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <button onClick={() => decreaseQuantity(product.id)}>-</button>
                     <input
-                        type="number"
+                        type="text"
                         value={quantities[product.id] || 1}
                         onChange={(e) => handleQuantityChange(e, product.id, product.stock)}
                         style={{ width: 50 }}
