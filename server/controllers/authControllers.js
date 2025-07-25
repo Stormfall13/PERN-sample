@@ -42,7 +42,7 @@ const login = async (req, res) => {
         const token = jwt.sign({ userId: user.id, role: user.role }, SECRET_KEY, {
             expiresIn: "24h",
         });
-
+        
         // Отправляем токен и пользователя
         res.json({
             message: "Успешный вход",

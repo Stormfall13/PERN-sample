@@ -9,6 +9,7 @@ const CategoryPage = () => {
     const [category, setCategory] = useState(null);
     const [products, setProducts] = useState([]);
     const [quantities, setQuantities] = useState({});
+    const [favoriteIds, setFavoriteIds] = useState([]);
 
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/api/categories/${id}`)
@@ -28,6 +29,22 @@ const CategoryPage = () => {
                 setQuantities(initialQuantities);
             })
             .catch((err) => console.error("Ошибка загрузки товаров", err));
+
+
+            const token = localStorage.getItem("token");
+            if (token) {
+                fetch(`${process.env.REACT_APP_API_URL}/api/favorites`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                .then((res) => res.json())
+                .then((favorites) => {
+                    const ids = favorites.map(fav => fav.productId);
+                    setFavoriteIds(ids);
+                })
+                .catch((err) => console.error("Ошибка загрузки избранного", err));
+            }
     }, [id]);
 
     const handleAddToCart = async (productId, stock) => {
@@ -87,6 +104,41 @@ const CategoryPage = () => {
         setQuantities((prev) => ({ ...prev, [id]: value }));
     };
 
+    const toggleFavorite = async (productId) => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Для добавления в избранное нужно войти");
+            return;
+        }
+    
+        const isFavorite = favoriteIds.includes(productId);
+    
+        try {
+            const response = await fetch(
+                `${process.env.REACT_APP_API_URL}/api/favorites/${isFavorite ? 'remove/' : 'add/'}${productId}`,
+                {
+                    method: isFavorite ? "DELETE" : "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+    
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || "Ошибка работы с избранным");
+            }
+    
+            // Обновим состояние
+            setFavoriteIds(prev =>
+                isFavorite ? prev.filter(id => id !== productId) : [...prev, productId]
+            );
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
     return (
         <div>
             <h1>{category ? category.name : "Загрузка..."}</h1>
@@ -121,6 +173,14 @@ const CategoryPage = () => {
                     />
                     <button onClick={() => increaseQuantity(product.id, product.stock)}>+</button>
                 </div>
+                <button onClick={() => toggleFavorite(product.id)}>
+                    {favoriteIds.includes(product.id) ? "★ В избранном" : "☆ В избранное"} {favoriteIds.length}
+                    {favoriteIds.length > 0 ? (
+                        <a href="/favorites">Избранное</a>
+                    ) : (
+                        ''
+                    )}
+                </button>
                 <button onClick={() => handleAddToCart(product.id, product.stock)}>
                     Добавить в корзину
                 </button>

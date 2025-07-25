@@ -12,6 +12,7 @@ const imageRoutes = require("./routes/imageRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
+const favoriteRoutes = require("./routes/favoriteRoutes");
 
 const authMiddleware = require("./middlewares/authMiddleware");
 
@@ -46,7 +47,7 @@ app.use("/assets", (req, res, next) => {
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
-
+app.use("/api/favorites", favoriteRoutes);
 
 
 // Защищённый маршрут (пример)

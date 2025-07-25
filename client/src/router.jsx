@@ -14,6 +14,7 @@ const BasketPage = lazy(() => import("./pages/BasketPage"));
 const ProductPage = lazy(() => import("./pages/ProductPage"));
 const AdmimAllUsersPage = lazy(() => import("./pages/AdminAllUsersPage"));
 const SearchResultsPage = lazy(() => import("./pages/SearchResultsPage"));
+const Favorites = lazy(() => import("./pages/Favorites"));
 
 
 const AppRouter = () => {
@@ -31,6 +32,7 @@ const AppRouter = () => {
                     <Route path="/basket" element={<BasketPage/>} />
                     <Route path="/product/:id" element={<ProductPage />} />
                     <Route path="/search" element={<SearchResultsPage />} />
+                    <Route path="/favorites" element={<Favorites />} />
 
                     
                     {/* 🔐 Защищенные маршруты (только для user и admin) */}
