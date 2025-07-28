@@ -173,14 +173,14 @@ const CategoryPage = () => {
                     />
                     <button onClick={() => increaseQuantity(product.id, product.stock)}>+</button>
                 </div>
-                <button onClick={() => toggleFavorite(product.id)}>
-                    {favoriteIds.includes(product.id) ? "★ В избранном" : "☆ В избранное"} {favoriteIds.length}
+                    <button onClick={() => toggleFavorite(product.id)}>
+                        {favoriteIds.includes(product.id) ? "★ В избранном" : "☆ В избранное"} {favoriteIds.length}
+                    </button>
                     {favoriteIds.length > 0 ? (
-                        <a href="/favorites">Избранное</a>
+                        <a href="/favorites" target="_blank">Избранное</a>
                     ) : (
                         ''
                     )}
-                </button>
                 <button onClick={() => handleAddToCart(product.id, product.stock)}>
                     Добавить в корзину
                 </button>

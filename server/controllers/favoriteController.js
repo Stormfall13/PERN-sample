@@ -41,14 +41,14 @@ const removeFromFavorites = async (req, res) => {
 // 📥 Получить все избранные товары пользователя
 const getUserFavorites = async (req, res) => {
     try {
-      const userId = req.user.id;
+      const userId = req.user.userId;
   
       const favorites = await Favorite.findAll({
         where: { userId }, // <--- ОБЯЗАТЕЛЬНО
         include: [
           {
             model: Product,
-            attributes: ['id', 'name', 'price', 'image'] // укажи нужные поля
+            attributes: ['id', 'nameProd', 'price', 'image', 'stock']
           }
         ]
       });

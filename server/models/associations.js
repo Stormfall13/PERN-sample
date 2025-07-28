@@ -4,6 +4,20 @@ const CartItem = require('./CartItem');
 const Product = require('./Product');
 const User = require('./User');
 const Favorite = require("./Favorite");
+const Chat = require('./Chat');
+const Message = require('./Message');
+
+// Chat -> User
+Chat.belongsTo(User, { foreignKey: "senderId", as: "Sender" });
+Chat.belongsTo(User, { foreignKey: "receiverId", as: "Receiver" });
+
+// Message -> Chat
+Message.belongsTo(Chat, { foreignKey: "chatId" });
+
+// Message -> User
+Message.belongsTo(User, { foreignKey: "senderId" });
+
+User.hasMany(Message, { foreignKey: "senderId", onDelete: "CASCADE" });
 
 // 🔁 Все связи определяем здесь
 Cart.belongsTo(User, { foreignKey: "userId", onDelete: "CASCADE" });
@@ -24,4 +38,6 @@ module.exports = {
   Product,
   User,
   Favorite,
+  Chat,
+  Message,
 };

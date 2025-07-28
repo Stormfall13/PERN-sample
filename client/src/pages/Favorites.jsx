@@ -32,7 +32,7 @@ const Favorites = () => {
 
   return (
     <div>
-      {/* <h2>Избранные товары</h2>
+    <h2>Избранные товары</h2>
       {favorites.length === 0 ? (
         <p>Нет избранных товаров.</p>
       ) : (
@@ -44,7 +44,7 @@ const Favorites = () => {
               <p>Цена: {fav.Product?.price} сум</p>
               {fav.Product?.image && (
                 <img
-                  src={`http://localhost:5000/${fav.Product.image}`}
+                  src={`http://localhost:5000${fav.Product.image}`}
                   alt={fav.Product.name}
                   width="150"
                 />
@@ -52,7 +52,7 @@ const Favorites = () => {
             </li>
           ))}
         </ul>
-      )} */}
+      )} 
     </div>
   );
 };

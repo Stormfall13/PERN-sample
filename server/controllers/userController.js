@@ -1,3 +1,4 @@
+const { Op } = require("sequelize")
 const User = require("../models/User");
 
 // Получение всех пользователей
@@ -14,23 +15,43 @@ const getUsers = async (req, res) => {
 };
 
 // Получение одного пользователя по ID
+// const getUserById = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const user = await User.findByPk(id, {
+//             attributes: ["id", "username", "email", "role"] // Исключаем пароль
+//         });
+
+//         if (!user) {
+//             return res.status(404).json({ message: "Пользователь не найден" });
+//         }
+
+//         res.json(user);
+//     } catch (error) {
+//         console.error("Ошибка при получении пользователя:", error);
+//         res.status(500).json({ message: "Ошибка сервера" });
+//     }
+// };
 const getUserById = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const user = await User.findByPk(id, {
-            attributes: ["id", "username", "email", "role"] // Исключаем пароль
-        });
-
-        if (!user) {
-            return res.status(404).json({ message: "Пользователь не найден" });
-        }
-
-        res.json(user);
-    } catch (error) {
-        console.error("Ошибка при получении пользователя:", error);
-        res.status(500).json({ message: "Ошибка сервера" });
+    const userId = req.params.id;
+  
+    if (isNaN(userId)) {
+      return res.status(400).json({ error: "Неверный ID" });
     }
-};
+  
+    try {
+      const user = await User.findByPk(userId, {
+        attributes: ["id", "username", "email", "role"],
+      });
+  
+      if (!user) return res.status(404).json({ error: "Пользователь не найден" });
+  
+      res.json(user);
+    } catch (err) {
+      console.error("Ошибка при получении пользователя:", err);
+      res.status(500).json({ error: "Ошибка сервера" });
+    }
+  };
 
 const updateUser = async (req, res) => {
     try {
@@ -67,4 +88,28 @@ const deleteUser = async (req, res) => {
     }
 };
 
-module.exports = { getUsers, getUserById, updateUser, deleteUser };
+const searchUsers = async (req, res) => {
+    try {
+      const searchQuery = req.query.q;
+  
+      if (!searchQuery) {
+        return res.status(400).json({ message: "Нет поискового запроса" });
+      }
+  
+      const users = await User.findAll({
+        where: {
+          username: {
+            [Op.iLike]: `%${searchQuery}%`,
+          },
+        },
+        attributes: ["id", "username", "email"], // ❗Укажи нужные поля
+      });
+  
+      res.json(users);
+    } catch (error) {
+      console.error("Ошибка при поиске пользователей:", error);
+      res.status(500).json({ message: "Внутренняя ошибка сервера" });
+    }
+};
+
+module.exports = { getUsers, getUserById, updateUser, deleteUser, searchUsers };
