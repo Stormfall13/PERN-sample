@@ -1,7 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
-const Cart = require("./Cart");
-const Product = require("./Product");
 
 const CartItem = sequelize.define("CartItem", {
     quantity: {
@@ -18,6 +16,5 @@ const CartItem = sequelize.define("CartItem", {
         allowNull: false,
     },
 });
-
 
 module.exports = CartItem;

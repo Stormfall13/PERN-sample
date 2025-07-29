@@ -15,8 +15,6 @@ const ProductPage = lazy(() => import("./pages/ProductPage"));
 const AdmimAllUsersPage = lazy(() => import("./pages/AdminAllUsersPage"));
 const SearchResultsPage = lazy(() => import("./pages/SearchResultsPage"));
 const Favorites = lazy(() => import("./pages/Favorites"));
-const ChatPage = lazy(() => import('./pages/ChatPage'));
-
 
 const AppRouter = () => {
 
@@ -45,8 +43,6 @@ const AppRouter = () => {
                     <Route path="/category/:id" element={ <ProtectedRoute allowedRoles={["admin", "user"]}> <CategoryPage /> </ProtectedRoute> } />
                     <Route path="/basket" element={<ProtectedRoute allowedRoles={["user", "admin"]}> <BasketPage/> </ProtectedRoute>} />
                     <Route path="/product/:id" element={<ProtectedRoute allowedRoles={["admin", "user"]}> <ProductPage /> </ProtectedRoute> } />
-
-                    <Route path="/chat" element={<ProtectedRoute allowedRoles={["admin", "user"]}> <ChatPage /> </ProtectedRoute> } />
 
                     {/* Если страница не найдена — редирект на `/` */}
                     <Route path="*" element={<Navigate to="/" />} />

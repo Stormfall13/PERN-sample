@@ -1,23 +1,9 @@
-// models/index.js
 const Cart = require('./Cart');
 const CartItem = require('./CartItem');
 const Product = require('./Product');
 const User = require('./User');
 const Favorite = require("./Favorite");
-const Chat = require('./Chat');
-const Message = require('./Message');
-
-// Chat -> User
-Chat.belongsTo(User, { foreignKey: "senderId", as: "Sender" });
-Chat.belongsTo(User, { foreignKey: "receiverId", as: "Receiver" });
-
-// Message -> Chat
-Message.belongsTo(Chat, { foreignKey: "chatId" });
-
-// Message -> User
-Message.belongsTo(User, { foreignKey: "senderId" });
-
-User.hasMany(Message, { foreignKey: "senderId", onDelete: "CASCADE" });
+const Category = require("./Category");
 
 // 🔁 Все связи определяем здесь
 Cart.belongsTo(User, { foreignKey: "userId", onDelete: "CASCADE" });
@@ -32,12 +18,14 @@ Favorite.belongsTo(User, { foreignKey: 'userId' });
 Product.hasMany(Favorite, { foreignKey: 'productId' });
 Favorite.belongsTo(Product, { foreignKey: 'productId' });
 
+Category.hasMany(Product, { foreignKey: "categoryId", onDelete: "CASCADE" });
+Product.belongsTo(Category, { foreignKey: "categoryId" });
+
+
 module.exports = {
   Cart,
   CartItem,
   Product,
   User,
   Favorite,
-  Chat,
-  Message,
 };

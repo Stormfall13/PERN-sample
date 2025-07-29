@@ -32,7 +32,6 @@ router.get("/", async (req, res) => {
 // });
 
 // Получить категорию по ID
-
 router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;

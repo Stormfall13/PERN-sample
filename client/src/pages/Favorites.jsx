@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 
+import noPhoto from "../assets/no-photo.png";
+
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
-  console.log(favorites);
-  
 
   const fetchFavorites = async () => {
     try {
@@ -42,13 +42,11 @@ const Favorites = () => {
               <h3>{fav.Product?.name}</h3>
               <p>{fav.Product?.description}</p>
               <p>Цена: {fav.Product?.price} сум</p>
-              {fav.Product?.image && (
-                <img
-                  src={`http://localhost:5000${fav.Product.image}`}
-                  alt={fav.Product.name}
-                  width="150"
-                />
-              )}
+              <img
+                src={fav.Product.image ? `${process.env.REACT_APP_API_URL}${fav.Product.image}` : noPhoto}
+                alt={fav.Product.name}
+                width="150"
+              />
             </li>
           ))}
         </ul>

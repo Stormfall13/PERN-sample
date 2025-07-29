@@ -15,6 +15,8 @@ const AdminPage = () => {
     
     const [categoryName, setCategoryName] = useState("");
 
+    const [categories, setCategories] = useState([]);
+
     const [windowOverlay, setWindowOverlay] = useState(false);
     
     const token = useSelector((state) => state.auth.token);
@@ -75,6 +77,7 @@ const AdminPage = () => {
         }
     };
 
+
     useEffect(() => {
         if (!token) {
             navigate("/login");
@@ -88,6 +91,17 @@ const AdminPage = () => {
             return;
         }
 
+        const fetchCategories = async () => {
+            try {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/categories`);
+                if (!res.ok) throw new Error("Ошибка загрузки категорий");
+                const data = await res.json();
+                setCategories(data);
+            } catch (error) {
+                console.error("Ошибка категорий:", error);
+            }
+        };
+        
         const fetchImages = async () => {
             try {
                 const res = await fetch(`${process.env.REACT_APP_API_URL}/api/images`);
@@ -100,6 +114,7 @@ const AdminPage = () => {
         };
 
         fetchImages();
+        fetchCategories();
 
     }, [token, user, navigate]);
 
@@ -122,7 +137,7 @@ const AdminPage = () => {
         <div className="admin-container">
             <Header />
             <Link to="/gallery">
-                <button>Перейти в галерею</button>
+                Перейти в галерею
             </Link>
             <Link to='/all-users'>
                 Страница пользователей
@@ -148,7 +163,17 @@ const AdminPage = () => {
                 <form onSubmit={handleSubmit}>
                     <input type="text" placeholder="Название" value={nameProd} onChange={(e) => setNameProd(e.target.value)} required />
                     <input type="number" placeholder="Цена" value={price} onChange={(e) => setPrice(e.target.value)} required />
-                    <input type="number" placeholder="ID категории" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required />
+                    <select
+                        value={categoryId}
+                        onChange={(e) => setCategoryId(e.target.value)}
+                        required >
+                        <option value="">Выберите категорию</option>
+                        {categories.map((cat) => (
+                            <option key={cat.id} value={cat.id}>
+                                {cat.name}
+                            </option>
+                        ))}
+                    </select>
                     <input type="number" placeholder="Количество" value={stock} onChange={(e) => setStock(e.target.value)}/>
                     <input type="text" placeholder="ссылка изображения" value={image} onChange={(e) => setImage(e.target.value)} />
                     <div className="gallery__selected">

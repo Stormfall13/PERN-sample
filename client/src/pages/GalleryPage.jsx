@@ -8,7 +8,6 @@ const GalleryPage = () => {
     const [images, setImages] = useState([]);
     const [selectedFile, setSelectedFile] = useState(null);
     const navigate = useNavigate();
-    console.log(images);
     
     const token = useSelector((state) => state.auth.token);
 

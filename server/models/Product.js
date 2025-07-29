@@ -2,7 +2,6 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 const Category = require("./Category");
 
-
 const Product = sequelize.define("Product", {
     nameProd: {
         type: DataTypes.STRING,
@@ -31,8 +30,5 @@ const Product = sequelize.define("Product", {
         defaultValue: 0,
     }
 });
-
-Category.hasMany(Product, { foreignKey: "categoryId", onDelete: "CASCADE" });
-Product.belongsTo(Category, { foreignKey: "categoryId" });
 
 module.exports = Product;
