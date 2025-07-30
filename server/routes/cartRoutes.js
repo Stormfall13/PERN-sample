@@ -29,7 +29,6 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 // 📌 Добавить товар в корзину
-// 📁 routes/cart.js
 router.post("/add", authMiddleware, async (req, res) => {
     try {
       const { productId, quantity } = req.body;

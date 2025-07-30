@@ -1,4 +1,3 @@
-const { Op } = require("sequelize")
 const User = require("../models/User");
 
 // Получение всех пользователей
@@ -88,28 +87,4 @@ const deleteUser = async (req, res) => {
     }
 };
 
-const searchUsers = async (req, res) => {
-    try {
-      const searchQuery = req.query.q;
-  
-      if (!searchQuery) {
-        return res.status(400).json({ message: "Нет поискового запроса" });
-      }
-  
-      const users = await User.findAll({
-        where: {
-          username: {
-            [Op.iLike]: `%${searchQuery}%`,
-          },
-        },
-        attributes: ["id", "username", "email"], // ❗Укажи нужные поля
-      });
-  
-      res.json(users);
-    } catch (error) {
-      console.error("Ошибка при поиске пользователей:", error);
-      res.status(500).json({ message: "Внутренняя ошибка сервера" });
-    }
-};
-
-module.exports = { getUsers, getUserById, updateUser, deleteUser, searchUsers };
+module.exports = { getUsers, getUserById, updateUser, deleteUser };
