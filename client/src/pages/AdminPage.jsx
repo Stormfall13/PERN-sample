@@ -14,10 +14,14 @@ const AdminPage = () => {
     const [allImages, setAllImages] = useState([]);
     
     const [categoryName, setCategoryName] = useState("");
+    const [categoryDescription, setCategoryDescription] = useState("");
+    const [categoryImage, setCategoryImage] = useState("");
 
     const [categories, setCategories] = useState([]);
 
     const [windowOverlay, setWindowOverlay] = useState(false);
+    const [productOverlay, setProductOverlay] = useState(false);
+    const [categoryOverlay, setCategoryOverlay] = useState(false);
     
     const token = useSelector((state) => state.auth.token);
     const user = useSelector((state) => state.auth.user);
@@ -64,7 +68,11 @@ const AdminPage = () => {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({ name: categoryName }),
+                body: JSON.stringify({
+                    name: categoryName,
+                    description: categoryDescription,
+                    image: categoryImage
+                }),
             });
 
             if (!response.ok) throw new Error("Ошибка при добавлении категории");
@@ -72,6 +80,8 @@ const AdminPage = () => {
             const data = await response.json();
             console.log("Категория добавлена:", data);
             setCategoryName("");
+            setCategoryDescription("");
+            setCategoryImage("");
         } catch (error) {
             console.error("Ошибка:", error);
         }
@@ -124,13 +134,25 @@ const AdminPage = () => {
     }
     
     const toggleOverlay = () => {
-        setWindowOverlay(!windowOverlay);
+        setWindowOverlay(!productOverlay);
     };
 
 
-    const selectImage = (imgPath) => {
-        setImage(imgPath);        // Устанавливаем ссылку на выбранное изображение
-        setWindowOverlay(false); // Закрываем оверлей
+    // const selectImage = (imgPath) => {
+    //     setImage(imgPath);        // Устанавливаем ссылку на выбранное изображение
+    //     setWindowOverlay(false); // Закрываем оверлей
+    // };
+
+    // выбор для товара
+    const selectProductImage = (imgPath) => {
+        setImage(imgPath);
+        setProductOverlay(false);
+    };
+
+    // выбор для категории
+    const selectCategoryImage = (imgPath) => {
+        setCategoryImage(imgPath);
+        setCategoryOverlay(false);
     };
 
     return (
@@ -155,6 +177,26 @@ const AdminPage = () => {
                     onChange={(e) => setCategoryName(e.target.value)}
                     required
                 />
+                <input
+                    placeholder="Описание категории"
+                    value={categoryDescription}
+                    onChange={(e) => setCategoryDescription(e.target.value)}
+                />
+                <input type="text" placeholder="ссылка изображения" value={categoryImage} onChange={(e) => setCategoryImage(e.target.value)} />
+                <div className="gallery__selected">
+                    <button type="button" onClick={() => setCategoryOverlay(true)}>Добавить из Галереи</button> 
+                    {categoryImage ? (
+                    <div className="selected__image" style={{ maxWidth: 100, maxHeight: 100 }}>
+                        <img
+                        src={`${process.env.REACT_APP_API_URL}${categoryImage.startsWith("/") ? "" : "/uploads/"}${categoryImage}`}
+                        alt="Выбранное изображение"
+                        style={{ width: "100%" }}
+                        />
+                    </div>
+                    ) : (
+                    <p>Изображение не выбрано</p>
+                    )}
+                </div>
                 <button type="submit">Добавить категорию</button>
             </form>
 
@@ -177,7 +219,7 @@ const AdminPage = () => {
                     <input type="number" placeholder="Количество" value={stock} onChange={(e) => setStock(e.target.value)}/>
                     <input type="text" placeholder="ссылка изображения" value={image} onChange={(e) => setImage(e.target.value)} />
                     <div className="gallery__selected">
-                        <button type="button" onClick={toggleOverlay}>Добавить из Галереи</button> 
+                        <button type="button" onClick={() => setProductOverlay(true)}>Добавить из Галереи</button> 
                         {image ? (
                         <div className="selected__image" style={{ maxWidth: 100, maxHeight: 100 }}>
                             <img
@@ -193,7 +235,7 @@ const AdminPage = () => {
                     <button type="submit">Добавить</button>
                 </form>
             </div>
-            {windowOverlay && (
+            {categoryOverlay && (
                 <div className="overlay" style={{
                     position: 'fixed',
                     zIndex: 10,
@@ -206,14 +248,43 @@ const AdminPage = () => {
                 }}>
                     <div className="overlay-content">
                         <h2>Выберите изображение</h2>
-                        <button onClick={toggleOverlay} className="close-btn">Закрыть</button>
+                        <button onClick={() => setCategoryOverlay(false)} className="close-btn">Закрыть</button>
                         <div className="image-grid" style={{ display: "flex" }}>
                             {allImages.map((img) => (
                                 <div className="image__grid-wrapper" key={img.id} style={{ cursor: 'pointer', maxWidth: 150 }}>
                                     <img
                                         src={`${process.env.REACT_APP_API_URL}${img.filepath}`}
                                         alt={img.filepath}
-                                        onClick={() => selectImage(img.filepath)}
+                                        onClick={() => selectCategoryImage(img.filepath)}
+                                        style={{ width: '100%', borderRadius: 8, border: '2px solid #ccc' }}
+                                    />
+                                </div> 
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+            {productOverlay && (
+                <div className="overlay" style={{
+                    position: 'fixed',
+                    zIndex: 10,
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: '#424242',
+                    color: "#e0e0e0"
+                }}>
+                    <div className="overlay-content">
+                        <h2>Выберите изображение</h2>
+                        <button onClick={() => setProductOverlay(false)} className="close-btn">Закрыть</button>
+                        <div className="image-grid" style={{ display: "flex" }}>
+                            {allImages.map((img) => (
+                                <div className="image__grid-wrapper" key={img.id} style={{ cursor: 'pointer', maxWidth: 150 }}>
+                                    <img
+                                        src={`${process.env.REACT_APP_API_URL}${img.filepath}`}
+                                        alt={img.filepath}
+                                        onClick={() => selectProductImage(img.filepath)}
                                         style={{ width: '100%', borderRadius: 8, border: '2px solid #ccc' }}
                                     />
                                 </div> 

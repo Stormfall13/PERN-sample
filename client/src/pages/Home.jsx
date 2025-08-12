@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import BasketCount from "../components/BasketCount";
 
+import noPhoto from '../assets/no-photo.png';
+
 
 const Home = () => {
 
@@ -24,7 +26,10 @@ const Home = () => {
                 <ul>
                 {categories.map((category) => (
                     <li key={category.id}>
-                    <Link to={`/category/${category.id}`}>{category.name}</Link>
+                    <Link to={`/category/${category.id}`}>
+                    {category.name}
+                    <img src={`${process.env.REACT_APP_API_URL}${category.image}`} alt="category image" />
+                    </Link>
                     </li>
                 ))}
                 </ul>
