@@ -89,7 +89,10 @@ const ProductPage = () => {
       <p><strong>Количество на складе:</strong> {product.stock}</p>
       <p><strong>Цена:</strong> {product.price} $</p>
       <p><strong>Категория:</strong> {product.Category?.name || "Без категории"}</p>
-
+      <div>{product.isHit ? 'Хит' : ''}</div>
+      <div>{product.isNew ? 'Новинка' : ''}</div>
+      <div>{product.isSale ? 'Акция' : ''}</div>
+      
       <div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
         <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} disabled={quantity <= 1}>-</button>
         <input

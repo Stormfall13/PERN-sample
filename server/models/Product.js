@@ -28,6 +28,18 @@ const Product = sequelize.define("Product", {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
+    },
+    isNew: { // Новинка
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
+    isHit: { // Хит продаж
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
+    isSale: { // Акция
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     }
 });
 

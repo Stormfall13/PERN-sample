@@ -52,19 +52,19 @@ const CategoryPage = () => {
 
     const handleIncrease = (id, stock) => {
         dispatch(increaseQuantity({ productId: id, stock }));
-      };
-      
+    };
+    
     const handleDecrease = (id) => {
         dispatch(decreaseQuantity({ productId: id }));
     };
-      
+    
     const handleQuantityChange = (e, id, stock) => {
         const value = parseInt(e.target.value, 10);
         if (isNaN(value)) return;
         dispatch(changeQuantity({ productId: id, quantity: value, stock }));
     };
 
-      
+    
     const toggleFavorite = async (productId) => {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -118,6 +118,9 @@ const CategoryPage = () => {
                                 alt={product.nameProd}
                                 width="200"
                             />
+                            <div>{product.isHit ? 'Хит' : ''}</div>
+                            <div>{product.isNew ? 'Новинка' : ''}</div>
+                            <div>{product.isSale ? 'Акция' : ''}</div>
                             <p>На складе: {product.stock}</p>
                         </Link>
 

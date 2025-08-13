@@ -28,7 +28,19 @@ const Home = () => {
                     <li key={category.id}>
                     <Link to={`/category/${category.id}`}>
                     {category.name}
-                    <img src={`${process.env.REACT_APP_API_URL}${category.image}`} alt="category image" />
+                    <div style={{
+                        width: 100,
+                        height: 100,
+                    }}>
+                        <img 
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                            }}
+                            src={category.image ? `${process.env.REACT_APP_API_URL}${category.image}` : noPhoto}
+                            alt="category image" />
+                    </div>
+                    
                     </Link>
                     </li>
                 ))}

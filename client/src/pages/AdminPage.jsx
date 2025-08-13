@@ -9,7 +9,7 @@ const AdminPage = () => {
     const [nameProd, setNameProd] = useState("");
     const [price, setPrice] = useState("");
     const [categoryId, setCategoryId] = useState("");
-    const [stock, setStock] = useState("")
+    const [stock, setStock] = useState("0")
     const [image, setImage] = useState("");
     const [allImages, setAllImages] = useState([]);
     
@@ -19,9 +19,13 @@ const AdminPage = () => {
 
     const [categories, setCategories] = useState([]);
 
-    const [windowOverlay, setWindowOverlay] = useState(false);
     const [productOverlay, setProductOverlay] = useState(false);
     const [categoryOverlay, setCategoryOverlay] = useState(false);
+
+    const [isHit, setIsHit] = useState(false);
+    const [isNew, setIsNew] = useState(false);
+    const [isSale, setIsSale] = useState(false);
+    
     
     const token = useSelector((state) => state.auth.token);
     const user = useSelector((state) => state.auth.user);
@@ -29,21 +33,25 @@ const AdminPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        
         const payload = {
             nameProd,
             price,
             categoryId,
             image,
             stock,
+            isHit,
+            isNew,
+            isSale,
         };
         
         console.log("📤 JSON отправки:", JSON.stringify(payload, null, 2));
-    
+        
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/products`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(payload),
         });
@@ -56,11 +64,15 @@ const AdminPage = () => {
         setCategoryId("")
         setImage("")
         setStock("")
+        setIsHit(false)
+        setIsNew(false)
+        setIsSale(false)
     };
 
 
     const handleCategorySubmit = async (e) => {
         e.preventDefault();
+
         try {
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/categories`, {
                 method: "POST",
@@ -133,15 +145,7 @@ const AdminPage = () => {
         return <h2>Загрузка...</h2>;
     }
     
-    const toggleOverlay = () => {
-        setWindowOverlay(!productOverlay);
-    };
 
-
-    // const selectImage = (imgPath) => {
-    //     setImage(imgPath);        // Устанавливаем ссылку на выбранное изображение
-    //     setWindowOverlay(false); // Закрываем оверлей
-    // };
 
     // выбор для товара
     const selectProductImage = (imgPath) => {
@@ -153,6 +157,7 @@ const AdminPage = () => {
     const selectCategoryImage = (imgPath) => {
         setCategoryImage(imgPath);
         setCategoryOverlay(false);
+        console.log(imgPath)
     };
 
     return (
@@ -217,6 +222,32 @@ const AdminPage = () => {
                         ))}
                     </select>
                     <input type="number" placeholder="Количество" value={stock} onChange={(e) => setStock(e.target.value)}/>
+                    <div>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={isHit}
+                                onChange={(e) => setIsHit(e.target.checked)}
+                            />
+                            Хит
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={isNew}
+                                onChange={(e) => setIsNew(e.target.checked)}
+                            />
+                            Новинка
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={isSale}
+                                onChange={(e) => setIsSale(e.target.checked)}
+                            />
+                            Акция
+                        </label>
+                    </div>
                     <input type="text" placeholder="ссылка изображения" value={image} onChange={(e) => setImage(e.target.value)} />
                     <div className="gallery__selected">
                         <button type="button" onClick={() => setProductOverlay(true)}>Добавить из Галереи</button> 

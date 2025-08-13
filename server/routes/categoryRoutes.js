@@ -50,13 +50,13 @@ router.get("/:id", async (req, res) => {
 // Создать категорию
 router.post("/", async (req, res) => {
     try {
-        const { name } = req.body;
+        const { name, description, image } = req.body;
     
         if (!name) {
             return res.status(400).json({ message: "Название категории обязательно" });
         }
     
-        const newCategory = await Category.create({ name });
+        const newCategory = await Category.create({ name, description, image });
         res.status(201).json(newCategory);
         } catch (err) {
         res.status(500).json({ message: "Ошибка сервера", error: err.message });
