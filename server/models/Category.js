@@ -5,7 +5,7 @@ const Category = sequelize.define("Category", {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        // unique: true,
     },
     description: {
         type: DataTypes.STRING,
@@ -14,7 +14,11 @@ const Category = sequelize.define("Category", {
     image: {
         type: DataTypes.STRING,
         allowNull: true,
-    }
+    },
+    collection: {
+        type: DataTypes.STRING, 
+        allowNull: true,
+    },
 });
 
 module.exports = Category;

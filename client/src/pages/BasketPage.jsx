@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate ,Link } from "react-router-dom";
 import noPhoto from "../assets/no-photo.png";
+import HeaderMain from "../components/HeaderMain";
 
 const BasketPage = () => {
   const [cart, setCart] = useState(null);
@@ -109,9 +110,11 @@ const BasketPage = () => {
   const totalPrice = cart.CartItems.reduce((sum, item) => {
     return sum + item.Product.price * item.quantity;
   }, 0);
-  if (!Array.isArray(cart.CartItems) || cart.CartItems.length === 0) return <div>Корзина пуста.</div>;
+  if (!Array.isArray(cart.CartItems) || cart.CartItems.length === 0) return <div><HeaderMain /> Корзина пуста.</div>;
 
   return (
+    <>
+    <HeaderMain />
     <div>
       <h1>Корзина</h1>
       <ul>
@@ -163,6 +166,7 @@ const BasketPage = () => {
         Очистить корзину
       </button>
     </div>
+    </>
   );
 };
 

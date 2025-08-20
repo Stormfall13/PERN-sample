@@ -15,13 +15,14 @@ const ProductPage = lazy(() => import("./pages/ProductPage"));
 const AdmimAllUsersPage = lazy(() => import("./pages/AdminAllUsersPage"));
 const SearchResultsPage = lazy(() => import("./pages/SearchResultsPage"));
 const Favorites = lazy(() => import("./pages/Favorites"));
+const AllCategoryPage = lazy(() => import("./pages/AllCategoryPage"));
+const BrandsPage = lazy(() => import("./pages/BrandsPage"));
+
 
 const AppRouter = () => {
 
     return (
         <Router>
-            <a href="/">Главная</a>
-            <GlobalSearchProduct />
             <Suspense fallback={<div>Загрузка...</div>}>
                 <Routes>
                     <Route path="/login" element={<Login />} />
@@ -32,6 +33,8 @@ const AppRouter = () => {
                     <Route path="/product/:id" element={<ProductPage />} />
                     <Route path="/search" element={<SearchResultsPage />} />
                     <Route path="/favorites" element={<Favorites />} />
+                    <Route path="/allcategory" element={<AllCategoryPage />} />
+                    <Route path="/brand/:brandName" element={<BrandsPage />} />
 
                     
                     {/* 🔐 Защищенные маршруты (только для user и admin) */}
