@@ -83,20 +83,43 @@ router.post("/", auth, async (req, res) => {
 });
 
 // DELETE /api/qna/:id - Удалить свой вопрос/ответ (Может автор или админ)
+// router.delete("/:id", auth, async (req, res) => {
+//     try {
+//         const qnaItem = await QnA.findByPk(req.params.id);
+//         if (!qnaItem) {
+//             return res.status(404).json({ message: "Вопрос/ответ не найден" });
+//         }
+
+//         // Проверяем права: автор или админ
+//         if (qnaItem.userId !== req.user.id && req.user.role !== "admin") {
+//             return res.status(403).json({ message: "Можно удалять только свои сообщения" });
+//         }
+
+//         // Если удаляется вопрос, каскадно удаляем все ответы (настроено в БД)
+//         await qnaItem.destroy();
+//         res.json({ message: "Удалено" });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: "Ошибка при удалении" });
+//     }
+// });
+
+// DELETE /api/qna/:id - Удалить вопрос/ответ (только админ)
 router.delete("/:id", auth, async (req, res) => {
     try {
+        // Только админ
+        if (req.user.role !== "admin") {
+            return res.status(403).json({ message: "Нет доступа. Удалять может только админ" });
+        }
+
         const qnaItem = await QnA.findByPk(req.params.id);
         if (!qnaItem) {
             return res.status(404).json({ message: "Вопрос/ответ не найден" });
         }
 
-        // Проверяем права: автор или админ
-        if (qnaItem.userId !== req.user.id && req.user.role !== "admin") {
-            return res.status(403).json({ message: "Можно удалять только свои сообщения" });
-        }
-
-        // Если удаляется вопрос, каскадно удаляем все ответы (настроено в БД)
+        // Каскадное удаление ответов произойдет автоматически благодаря onDelete: "CASCADE"
         await qnaItem.destroy();
+
         res.json({ message: "Удалено" });
     } catch (error) {
         console.error(error);

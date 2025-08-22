@@ -36,7 +36,8 @@ const QnA = sequelize.define("QnA", {
         references: {
             model: 'QnAs', // Ссылка на эту же таблицу
             key: 'id'
-        }
+        },
+        onDelete: "CASCADE",
     },
     createdAt: {
         type: DataTypes.DATE,

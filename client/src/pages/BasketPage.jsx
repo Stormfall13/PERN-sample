@@ -107,6 +107,7 @@ const BasketPage = () => {
   };
 
   if (!cart) return <div>Загрузка корзины...</div>;
+
   const totalPrice = cart.CartItems.reduce((sum, item) => {
     return sum + item.Product.price * item.quantity;
   }, 0);
@@ -127,11 +128,15 @@ const BasketPage = () => {
             </h3>
             <p>Цена: {item.Product?.price || "?"} $</p>
             <p>Кол-во: {item.quantity}</p>
-            <img
-              src={item.Product?.image ? `${process.env.REACT_APP_API_URL}${item.Product.image}` : noPhoto}
-              alt={item.Product?.nameProd}
-              width="150"
-            />
+              <img
+                src={
+                  item.Product?.images && item.Product.images.length > 0
+                    ? `${process.env.REACT_APP_API_URL}${item.Product.images[0]}`
+                    : noPhoto
+                }
+                alt={item.Product?.nameProd}
+                width="150"
+              />
             <br />
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <button onClick={() => updateQuantity(item.Product.id, quantities[item.Product.id] - 1, item.Product.stock)}>-</button>

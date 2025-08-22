@@ -6,7 +6,6 @@ import HeaderMain from "../components/HeaderMain";
 
 
 const Home = () => {
-
     const dispatch = useDispatch();
 
     useEffect(() => {
