@@ -2,9 +2,6 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchFavorites } from "../store/slices/favoriteSlice";
 
-import HeaderMain from "../components/HeaderMain";
-
-
 const Home = () => {
     const dispatch = useDispatch();
 
@@ -17,7 +14,7 @@ const Home = () => {
 
     return (
         <>
-        <HeaderMain />
+            Главная
         </>
     );
 };

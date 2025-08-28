@@ -6,9 +6,9 @@ import { fetchProductsByCategory } from "../store/slices/productsSlice";
 import { fetchFavorites, toggleFavoriteLocally } from "../store/slices/favoriteSlice";
 import { addToCart } from "../store/slices/cartSlice";
 import { setInitialQuantities, increaseQuantity, decreaseQuantity, changeQuantity } from "../store/slices/quantitySlice";
+
 import noPhoto from "../assets/no-photo.png";
 import './categoryPage.css';
-import HeaderMain from "../components/HeaderMain";
 
 const CategoryPage = () => {
     const { id } = useParams();
@@ -208,7 +208,6 @@ const CategoryPage = () => {
 
     return (
         <>
-        <HeaderMain />
         <h1>{category ? category.name : "Загрузка..."}</h1>
         {/* {favoriteIds.length > 0 && (
             <div className="test" style={{ marginBottom: 20 }}>
@@ -541,6 +540,7 @@ const CategoryPage = () => {
                 </div>
             )}
         </div>
+
         </>
     );
 };
